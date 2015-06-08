@@ -12,48 +12,6 @@ import logging
 USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.30 Safari/537.36"
 ASK_FM_BASE = "http://ask.fm"
 
-"""
-class User(object):
-    Anon = User('', '')
-    def __init__(self, username, name):
-        self.username = username
-        self.name = name
-
-    def __eq__(self, other):
-        if type(other) is type(self):
-            return self.name == other.name
-        return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-
-class Question(object):
-    def __init__(self, text, recipient, author=User.Anon):
-        self.text = text
-        self.author = author
-        self.recipient = recipient
-"""
-
-"""
-class RequestHandler(urllib2.BaseHandler):
-    def __init__(self, outer):
-        self.outer = outer
-
-    def http_request(self, req):
-        cookie = self.outer._cookie_jar.output(attrs='', header='')
-        req.add_header('User-Agent', USER_AGENT)
-        req.add_header('Cookie', cookie)
-
-    def http_response(self, req, resp):
-        # put cookies into cookie jar
-        cookies = resp.info().getheaders('set-cookie')
-        for cookie_header in cookies:
-            self.outer._cookie_jar.load(cookie_header)
-
-        return resp
-"""
-
 class AskFmClient(object):
     def __init__(self):
         self.logged_in = False
@@ -63,18 +21,6 @@ class AskFmClient(object):
         self._cookie_jar = SimpleCookie()
         self._saved_token = None
 
-    """
-    def _save_cookie_jar(self):
-        with open('cookie_jar.txt', 'w') as f:
-            cookies = self._cookie_jar.output()
-            f.write(cookies)
-
-
-    def _load_cookie_jar(self):
-        with open('cookie_jar.txt', 'r') as f:
-            cookies = f.read()
-            self._cookie_jar.load(cookies)
-    """
 
     def _get_token(self):
         # make request
@@ -166,6 +112,7 @@ class AskFmClient(object):
         logging.debug('>> Getting profile questions')
         if not recipient:
             raise ValueError('Recipient is empty')
+
         # make request
         url = "http://ask.fm/{}".format(recipient)
         page = self._request(url)

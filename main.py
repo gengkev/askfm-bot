@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 
+import json
 import logging
-import webapp2
-from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
-
-import jinja2
+import random
 import os
 
-import askfm
-import json
+import jinja2
+import webapp2
+from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 from google.appengine.api import memcache
 
-import random
+import askfm
 
 COOKIE_STORE_KEY = 'askfm_cookie_store'
 COOKIE_MEMCACHE_TIMEOUT = 60*60*24*2 # 2 days
@@ -39,10 +38,9 @@ def get_client_and_login():
 
         client.login(username, password)
 
-        # save cookies for 1 day
+        # save cookies
         cookies = client._cookie_jar.output()
         success = memcache.add(COOKIE_STORE_KEY, cookies, COOKIE_MEMCACHE_TIMEOUT)
-
         logging.info("Cookies not in memcache, so logged in and stored: " + str(success))
 
     # already logged in
@@ -50,7 +48,7 @@ def get_client_and_login():
         client._cookie_jar.load(cookies)
         client.logged_in = True
 
-    assert client.logged_in == True
+    assert client.logged_in
     return client
 
 
@@ -95,19 +93,6 @@ class MainHandler(webapp2.RequestHandler):
 
         logging.info('MainHandler: listed %d questions' % len(questions))
 
-        """
-        self.response.headers['Content-Type'] = 'text/plain; charset=utf-8'
-        self.response.write('Listing pending questions:\n')
-        self.response.write('========\n\n')
-
-        client = get_client_and_login()
-        questions = client.get_inbox_questions()
-
-        for question in questions:
-            string = LIST_QUESTIONS_FORMAT.format(**question)
-            self.response.write(string.encode('utf-8'))
-        """
-
 
 # Handles requests to /process_questions
 class ProcessQuestionsHandler(webapp2.RequestHandler):
@@ -125,22 +110,6 @@ class ProcessQuestionsHandler(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 
         logging.info('ProcessQuestionsHandler: replied to %d questions' % len(replied_questions))
-
-        """
-        self.response.headers['Content-Type'] = 'text/plain; charset=utf-8'
-        self.response.write('Replying to all questions:\n')
-        client = get_client_and_login()
-        questions = client.get_inbox_questions()
-        replied_questions = reply_to_all_questions(client)
-
-        for question in replied_questions:
-            string = PROCESS_QUESTIONS_FORMAT.format(**question)
-            self.response.write(string.encode('utf-8'))
-
-        string = 'Replied to {:d} questions.'.format(len(replied_questions))
-        self.response.write(string + '\n')
-        logging.info('ProcessQuestionsHandler: ' + string)
-        """
 
 
 # Special handler for emails
