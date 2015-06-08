@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<head>
+    <link href="/stylesheets/main.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <h1>Questions in inbox</h1>
+
+    {% for q in questions %}
+    <div class="question">
+        <p>{{ q.question_id }} from
+        {% if q.author_username %}
+            <b>{{ q.author_name }}</b> ({{ q.author_username }})
+        {% else %}
+            Anonymous
+        {% endif %}
+        </p>
+        <blockquote>{{ q.question_text }}</blockquote>
+    </div>
+    {% endfor %}
+
+    <p>Listed {{ num_questions }} questions.</p>
+
+    <form method="POST" action="process_questions">
+        <input type="submit" value="Process questions" />
+    </form>
+
+</body>
+</html>
+{% endautoescape %}

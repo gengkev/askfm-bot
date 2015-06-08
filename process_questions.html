@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<head>
+    <link href="/stylesheets/main.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <a href="/" class="back">Home</a>
+    <h1>Processing questions:</h1>
+
+    {% for q in replied_questions %}
+    <div class="question">
+        <p>{{ q.question_id }} from
+        {% if q.author_username %}
+            <b>{{ q.author_name }}</b> ({{ q.author_username }})
+        {% else %}
+            Anonymous
+        {% endif %}
+        </p>
+        <blockquote>{{ q.question_text }}</blockquote>
+        <hr />
+        <blockquote>{{ q.answer_text }}</blockquote>
+    </div>
+    {% endfor %}
+
+    <p>Replied to {{ num_replied_questions }} questions.</p>
+
+</body>
+</html>
+{% endautoescape %}

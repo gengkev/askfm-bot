@@ -1,0 +1,23 @@
+body {
+    font-family: sans-serif;
+    max-width: 800px;
+    margin: 32px auto;
+}
+.question {
+    border: 1px solid #ccc;
+    margin: 8px;
+    padding: 8px;
+}
+a {
+    text-decoration: none;
+    color: blue;
+}
+a:hover {
+    text-decoration: underline;
+}
+a.back {
+    color: #888;
+}
+a.back:before {
+    content: '\002190\20';
+}
