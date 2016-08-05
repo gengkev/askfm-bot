@@ -1,6 +1,5 @@
 # askfm-bot
 
-01234567890123456789012345678901234567890123456789012345678901234567890123456789
 This bot was designed to run on Google App Engine, and automatically reply to
 questions posed to it on ask.fm by acting whenever an email notification was
 received. Unfortunately, ask.fm changed its internal APIs around a lot after it
